@@ -1,5 +1,9 @@
 mods.git4loenn.name=git4Lönn
 
 ui.menubar.git4loenn_fileMenu=git4Lönn
+
 ui.menubar.git4loenn_newCampaign=New Campaign
 ui.menubar.git4loenn_openCampaign=Open Campaign
+ui.menubar.git4loenn_settings=Settings
+
+ui.git4loenn_settings.title=Settings
