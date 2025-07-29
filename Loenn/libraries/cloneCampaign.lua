@@ -1,9 +1,16 @@
+local fileLocations = require("file_locations")
 local languageRegistry = require("language_registry")
+local mods = require("mods")
 local uiElements = require("ui.elements")
 local form = require("ui.forms.form")
 local widgetUtils = require("ui.widgets.utils")
 local windows = require("ui.windows")
 local windowPersister = require("ui.window_position_persister")
+local filesystem = require("utils.filesystem")
+
+local g4l = mods.requireFromPlugin("libraries.utils")
+
+--##
 
 local cloneCampaign = {}
 
@@ -13,12 +20,23 @@ windows.windowHandlers["git4loenn_cloneCampaign"] = holder
 function cloneCampaign.open()
 	local language = languageRegistry.getLanguage()
 
+	local data = {
+		cloneFrom = "",
+		repoName = "",
+	}
     local windowContent = uiElements.column({
     	uiElements.row({
 	        uiElements.label(tostring(language.ui.git4loenn.cloneCampaign.repo_uri)),
-	        uiElements.field("", function(_, text) end),
+	        uiElements.field(data.cloneFrom, function(_, text)
+	        	data.cloneFrom = text
+	    	end),
+	        uiElements.label(tostring(language.ui.git4loenn.cloneCampaign.repo_name)),
+	        uiElements.field(data.cloneFrom, function(_, text)
+	        	data.repoName = text
+	    	end),
 	        uiElements.button(tostring(language.ui.git4loenn.cloneCampaign.clone), function()
-	        	--os.execute("touch /home/abby/Documents/Backups/test") --this should work!
+	        	os.execute(string.format("git clone %s %s", data.cloneFrom, 
+	        		filesystem.joinpath(fileLocations.getCelesteDir(), "Mods", data.repoName)))
         	end),
 	    }),
     }):with({

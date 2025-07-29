@@ -1,5 +1,4 @@
 local languageRegistry = require("language_registry")
-local logging = require("logging")
 local mods = require("mods")
 local uiElements = require("ui.elements")
 local form = require("ui.forms.form")
@@ -9,14 +8,7 @@ local windowPersister = require("ui.window_position_persister")
 
 local settings = mods.getModSettings("git4loenn")
 local cloneCampaign = mods.requireFromPlugin("libraries.cloneCampaign")
-
-local g4l = {}
-
---##
-
-function g4l.log(toLog)
-    logging.info("[git4lönn] "..tostring(toLog))
-end
+local g4l = mods.requireFromPlugin("libraries.utils")
 
 --##
 
