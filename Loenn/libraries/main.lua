@@ -7,9 +7,8 @@ local widgetUtils = require("ui.widgets.utils")
 local windows = require("ui.windows")
 local windowPersister = require("ui.window_position_persister")
 
-local uiRoot = require("ui.ui_root")
-
 local settings = mods.getModSettings("git4loenn")
+local cloneCampaign = mods.requireFromPlugin("libraries.cloneCampaign")
 
 local g4l = {}
 
@@ -21,8 +20,8 @@ end
 
 --##
 
-local g4lSettingsHolder = uiElements.group({})
-windows.windowHandlers["git4loenn_settings"] = g4lSettingsHolder
+local settingsHolder = uiElements.group({})
+windows.windowHandlers["git4loenn_settings"] = settingsHolder
 function openSettings()
     local language = languageRegistry.getLanguage()
     local settingsTemp = "gorp gorp gorp gorp gorp"
@@ -38,15 +37,11 @@ function openSettings()
         }
     })
 
-    local window = uiElements.window(tostring(language.ui.git4loenn_settings.title), windowContent)
-
+    local window = uiElements.window(tostring(language.ui.git4loenn.settings.title), windowContent)
     windowContent:layout()
-
-    windowPersister.trackWindow("git4loenn_settingsWindow", window)
-
-    g4lSettingsHolder.parent:addChild(window)
-
-    widgetUtils.addWindowCloseButton(window, windowPersister.getWindowCloseCallback("git4loenn_settingsWindow"))
+    windowPersister.trackWindow("git4loenn_settings", window)
+    settingsHolder.parent:addChild(window)
+    widgetUtils.addWindowCloseButton(window, windowPersister.getWindowCloseCallback("git4loenn_settings"))
     widgetUtils.preventOutOfBoundsMovement(window)
     form.prepareScrollableWindow(window)
 
@@ -55,16 +50,22 @@ end
 
 local menubar = require("ui.menubar").menubar
 local fileMenu = $(menubar):find(menu -> menu[1] == "file")[2]
-if not $(fileMenu):find(item -> item[1] == "git4loenn_fileMenu") then
-    table.insert(fileMenu,{
-        "git4loenn_fileMenu",
-        {
-            {"git4loenn_newCampaign"},
-            {"git4loenn_openCampaign"},
-            {"git4loenn_settings", openSettings},
-        }
-    })
+for i,v in ipairs(fileMenu) do
+    if v[1] == "git4loenn_fileMenu" then
+        table.remove(fileMenu, i)
+        break
+    end
 end
+table.insert(fileMenu,{
+    "git4loenn_fileMenu",
+    {
+        {"git4loenn_newCampaign"},
+        {"git4loenn_openCampaign"},
+        {"git4loenn_cloneCampaign", cloneCampaign.open},
+        {},
+        {"git4loenn_settings", openSettings},
+    }
+})
 
 g4l.log("Loaded")
 

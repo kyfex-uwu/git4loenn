@@ -4,6 +4,11 @@ ui.menubar.git4loenn_fileMenu=git4Lönn
 
 ui.menubar.git4loenn_newCampaign=New Campaign
 ui.menubar.git4loenn_openCampaign=Open Campaign
+ui.menubar.git4loenn_cloneCampaign=Clone Campaign
 ui.menubar.git4loenn_settings=Settings
 
-ui.git4loenn_settings.title=Settings
+ui.git4loenn.settings.title=git4Lönn - Settings
+
+ui.git4loenn.cloneCampaign.title=git4Lönn - Clone Campaign
+ui.git4loenn.cloneCampaign.repo_uri=Repository URI
+ui.git4loenn.cloneCampaign.clone=Clone
