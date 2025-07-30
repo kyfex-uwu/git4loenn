@@ -3,6 +3,7 @@ local languageRegistry = require("language_registry")
 local mods = require("mods")
 local uiElements = require("ui.elements")
 local form = require("ui.forms.form")
+local notification = require("ui.notification")
 local widgetUtils = require("ui.widgets.utils")
 local windows = require("ui.windows")
 local windowPersister = require("ui.window_position_persister")
@@ -35,8 +36,12 @@ function cloneCampaign.open()
 	        	data.repoName = text
 	    	end),
 	        uiElements.button(tostring(language.ui.git4loenn.cloneCampaign.clone), function()
-	        	os.execute(string.format("git clone %s %s", data.cloneFrom, 
-	        		filesystem.joinpath(fileLocations.getCelesteDir(), "Mods", data.repoName)))
+	        	if os.execute(string.format("git clone %s %s", data.cloneFrom, 
+	        		filesystem.joinpath(fileLocations.getCelesteDir(), "Mods", data.repoName))) ~= 0 then
+	        		notification.notify("Could not clone repository")
+        		else
+	        		notification.notify("Successfully cloned repository")
+    			end
         	end),
 	    }),
     }):with({
