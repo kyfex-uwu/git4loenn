@@ -1,5 +1,5 @@
 - shared executable (think dll) that does:
-  - converts .g4l to .bin and back
+  - converts .g4l to .bin to .json
   - git engine things
 
 - loenn plugin
