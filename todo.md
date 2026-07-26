@@ -1,8 +1,10 @@
 - shared executable (think dll) that does:
-  - converts custom file format to bin and back
+  - converts .g4l to .bin and back
   - git engine things
 
-
 - loenn plugin
+  - visuals for git things (diffing, merge conflicts)
+  - interface for git commands
 
 - everest mod
+  - calls into shared executable to convert .g4l into .bin on the fly
