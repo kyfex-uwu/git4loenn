@@ -27,7 +27,7 @@ mapcoder.encodeFile = function(path, data, header)
 	return old_save(path, data, header)
 end
 mapcoder.decodeFile = function(path, header)
-	if path:sub(#path-3) == ".g4l_root" then
+	if path:sub(#path-8) == ".meta.g4l" then
         return custom_mapcoder.decodeFile(path, header)
     end
 
@@ -41,7 +41,7 @@ function openLevel()
         targetDirectory = filesystem.dirname(loaded_state.filename)
     end
 
-    filesystem.openDialog(targetDirectory, "g4l_root", loaded_state.loadFile)
+    filesystem.openDialog(targetDirectory, "meta.g4l", loaded_state.loadFile)
 end
 
 --##
