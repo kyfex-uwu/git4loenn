@@ -7,6 +7,7 @@ local logging = require("logging")
 local mapcoder = {}
 
 ---Reads a .json file and outputs the stored map's data
+---TODO: Update to .g4l
 ---@param path string
 ---@param header string
 ---@return LoennData | false # Map data in case of success, else false
@@ -66,6 +67,7 @@ function mapcoder.transform(data)
 end
 
 ---Save a map's data as a .json file
+---TODO: Update to .g4l
 ---@param path string
 ---@param data LoennData
 ---@param header string
