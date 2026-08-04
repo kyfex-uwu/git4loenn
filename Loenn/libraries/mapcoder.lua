@@ -42,12 +42,56 @@ end
 ---@return T
 local function identity(v) return v end
 
+---Transforms Loenn map level data into json map level data
+---@param level LoennItem Loenn map level data
+---@return DataItem # JSON map level data
+---@return string # The level's name
+function mapcoder.transformLevel(level)
+end
+
+---Transforms Loenn map data into json map data
+---@param data LoennData Loenn's map data
+---@return MapData # JSON map data
+---@return DataItem[] # JSON map data for levels
+function mapcoder.transformData(data)
+    coroutine.yield()
+
+    ---@type MapData
+    local mapData = {
+        _package = data._package,
+        __name = data.__name,
+    }
+    ---@type DataItem[]
+    local levelsData = {}
+
+    if #(data.__children or {}) ~= 0 then
+        mapData.__children = {}
+
+        for i, child in ipairs(data.__children or {}) do
+            if child.__name == "levels" then
+                mapData.__levels = {}
+
+                for j, level in ipairs(child.__children) do
+                    local levelData, levelName = mapcoder.transformLevel(level)
+                    table.insert(levelsData, levelData)
+                    table.insert(mapData.__levels, levelName)
+                end
+            else
+                table.insert(mapData.__children, mapcoder.transform(child))
+            end
+        end
+    end
+
+    return mapData, levelsData
+end
+
 ---Transforms Loenn map data item into json map data
 ---@param data LoennItem Loenn's map data item
 ---@return DataItem # JSON map data item
 function mapcoder.transform(data)
     coroutine.yield()
 
+    ---@type DataItem
     local toReturn = {}
 
     for attr, value in pairs(data) do
@@ -73,7 +117,7 @@ end
 ---@param data LoennData
 ---@param header string
 function mapcoder.encodeFile(path, data, header)
-    local mapData = mapcoder.transform(data)
+    local mapData, levelsData = mapcoder.transformData(data)
     local content = json.encode({
         header=header or "CELESTE MAP",
         package=data._package or "",

@@ -20,3 +20,4 @@
 
 ---@class MapData : DataItem
 ---@field _package string
+---@field __levels string[]?
