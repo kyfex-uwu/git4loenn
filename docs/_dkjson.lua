@@ -1,4 +1,4 @@
----@meta dkjson
+---@meta lib.dkjson
 
 ---@class dkjson
 local dkjson = {}
@@ -16,5 +16,12 @@ local dkjson = {}
 ---@param state EncodeState
 ---@return string
 function dkjson.encode (value, state) end
+
+---@param str string
+---@param pos integer
+---@param nullval any
+---@param ... unknown
+---@return any
+function dkjson.decode (str, pos, nullval, ...) end
 
 return dkjson

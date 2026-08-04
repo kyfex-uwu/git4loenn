@@ -1,8 +1,6 @@
 ---@meta mapcoder
 
----@module "dkjson"
 local json = require("lib.dkjson")
----@module "logging"
 local logging = require("logging")
 
 ---@class mapcoder
