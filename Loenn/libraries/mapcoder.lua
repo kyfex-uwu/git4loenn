@@ -1,4 +1,6 @@
+---@module "dkjson"
 local json = require("lib.dkjson")
+---@module "logging"
 local logging = require("logging")
 
 local mapcoder = {}
@@ -29,7 +31,11 @@ end
 
 --##
 
+---@generic T
+---@param v T
+---@return T
 local function identity(v) return v end
+
 function mapcoder.transform(data)
     coroutine.yield()
 
