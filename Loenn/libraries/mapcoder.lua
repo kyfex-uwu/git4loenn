@@ -3,28 +3,6 @@ local logging = require("logging")
 
 local mapcoder = {}
 
-local function decodeElement(data)
-    coroutine.yield()
-
-    local element = { __name=data.__name }
-
-    for attr,v in ipairs(data) do
-        if attr ~= "__children" then
-            element[attr]=v
-        end
-    end
-
-    if #(data.__children or {}) > 0 then
-        element.__children = {}
-
-        for _,child in ipairs(data.__children) do
-            table.insert(element.__children, decodeElement(child))
-        end
-    end
-
-    return element
-end
-
 --todo: fix this
 function mapcoder.decodeFile(path, header)
     header = header or "CELESTE MAP"
