@@ -74,7 +74,7 @@ function mapcoder.transformData(data)
                 for j, level in ipairs(child.__children) do
                     local levelData, levelName = mapcoder.transformLevel(level)
                     table.insert(levelsData, levelData)
-                    table.insert(mapData.__levels, levelName)
+                    table.insert(mapData.__levels, data._package.."."..levelName)
                 end
             else
                 table.insert(mapData.__children, mapcoder.transform(child))
