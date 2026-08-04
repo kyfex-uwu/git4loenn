@@ -42,7 +42,7 @@ end
 ---@return T
 local function identity(v) return v end
 
----Transform's Loenn map data into json map data
+---Transforms Loenn map data item into json map data
 ---@param data LoennItem Loenn's map data item
 ---@return DataItem # JSON map data item
 function mapcoder.transform(data)
