@@ -72,11 +72,11 @@ end
 ---@param data LoennData
 ---@param header string
 function mapcoder.encodeFile(path, data, header)
+    local mapData = mapcoder.transform(data)
     local content = json.encode({
         header=header or "CELESTE MAP",
         package=data._package or "",
-
-        data=mapcoder.transform(data)
+        data=mapData
     },{
         indent=true,
         exception=function(reason, value, state, defaultMessage)
