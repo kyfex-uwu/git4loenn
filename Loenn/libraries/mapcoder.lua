@@ -42,13 +42,6 @@ end
 ---@return T
 local function identity(v) return v end
 
----Transforms Loenn map level data into json map level data
----@param level LoennItem Loenn map level data
----@return DataItem # JSON map level data
----@return string # The level's name
-function mapcoder.transformLevel(level)
-end
-
 ---Transforms Loenn map data into json map data
 ---@param data LoennData Loenn's map data
 ---@return MapData # JSON map data
@@ -72,9 +65,9 @@ function mapcoder.transformData(data)
                 mapData.__levels = {}
 
                 for j, level in ipairs(child.__children) do
-                    local levelData, levelName = mapcoder.transformLevel(level)
+                    local levelData = mapcoder.transform(level)
                     table.insert(levelsData, levelData)
-                    table.insert(mapData.__levels, data._package.."."..levelName)
+                    table.insert(mapData.__levels, data._package.."."..levelData["name"])
                 end
             else
                 table.insert(mapData.__children, mapcoder.transform(child))
