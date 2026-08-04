@@ -15,13 +15,13 @@ local dkjson = {}
 ---@param value any
 ---@param state EncodeState
 ---@return string
-function dkjson.encode (value, state) end
+function dkjson.encode(value, state) end
 
 ---@param str string
 ---@param pos integer
 ---@param nullval any
 ---@param ... unknown
----@return any
-function dkjson.decode (str, pos, nullval, ...) end
+---@return table
+function dkjson.decode(str, pos, nullval, ...) end
 
 return dkjson
