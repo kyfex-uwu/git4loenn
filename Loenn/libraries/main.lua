@@ -13,7 +13,6 @@ local fileLocations = require("file_locations")
 local settings = mods.getModSettings("git4loenn")
 local cloneCampaign = mods.requireFromPlugin("libraries.cloneCampaign")
 local g4l = mods.requireFromPlugin("libraries.utils")
-
 local custom_mapcoder = mods.requireFromPlugin("libraries.custom_mapcoder")
 
 --##
@@ -28,22 +27,21 @@ mapcoder.encodeFile = function(path, data, header)
 	return old_save(path, data, header)
 end
 mapcoder.decodeFile = function(path, header)
-	if path:sub(#path-3) == ".g4l" then 
+	if path:sub(#path-3) == ".g4l_root" then
         return custom_mapcoder.decodeFile(path, header)
     end
 
 	return old_load(path, header)
 end
 
-local old_openMap = loaded_state.openMap
-loaded_state.openMap = function()
+function openLevel()
     local targetDirectory = fileLocations.getCelesteDir()
 
-    if loaded_state.filename and filesystem.isFile(loaded_state.filename) then
+    if loaded_state.filename and loaded_state.filename:sub(#loaded_state.filename-3) == ".g4l" and filesystem.isDirectory(loaded_state.filename) then
         targetDirectory = filesystem.dirname(loaded_state.filename)
     end
 
-    filesystem.openDialog(targetDirectory, "bin,json", loaded_state.loadFile)--todo: remove json and add g4l
+    filesystem.openDialog(targetDirectory, "g4l_root", loaded_state.loadFile)
 end
 
 --##
@@ -87,8 +85,8 @@ end
 table.insert(fileMenu,{
     "git4loenn_fileMenu",
     {
+        {"git4loenn_openLevel", openLevel},
         {"git4loenn_newCampaign"},
-        {"git4loenn_openCampaign"},
         {"git4loenn_cloneCampaign", cloneCampaign.open},
         {},
         {"git4loenn_settings", openSettings},
