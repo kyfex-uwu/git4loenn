@@ -8,6 +8,7 @@
 
 ---@class LoennItem : table
 ---@field __children LoennItem[]?
+---@field __name string
 
 ---@class LoennData : LoennItem
 ---@field _package string?
