@@ -1,16 +1,19 @@
 ---@meta LocalTypes
 
 ---@class MapDataTable : table
----@field data MapData
+---@field data LoennData
 ---@field package string
 ---@field header string
 
 
+---@class LoennItem : table
+---@field __children LoennItem[]?
+
+---@class LoennData : LoennItem
+---@field _package string?
+
+
 ---@class DataItem : table
----@field __children DataItem[]
-
----@class MapDataItem : DataItem
----@field __name string
-
----@class MapData : MapDataItem
----@field _package string
+---@field __children DataItem[]?
+---@field __name string?
+---@field _package string?

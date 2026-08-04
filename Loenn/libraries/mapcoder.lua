@@ -6,12 +6,10 @@ local logging = require("logging")
 ---@class mapcoder
 local mapcoder = {}
 
---todo: fix this
-
 ---Reads a .json file and outputs the stored map's data
 ---@param path string
 ---@param header string
----@return MapData | false # Map data in case of success, else false
+---@return LoennData | false # Map data in case of success, else false
 ---@return string? # The error message in case of failure, else nil
 function mapcoder.decodeFile(path, header)
     header = header or "CELESTE MAP"
@@ -44,8 +42,8 @@ end
 local function identity(v) return v end
 
 ---Transform's Loenn map data into json map data
----@param data DataItem Loenn's map data item
----@return MapDataItem # JSON map data item
+---@param data LoennItem Loenn's map data item
+---@return DataItem # JSON map data item
 function mapcoder.transform(data)
     coroutine.yield()
 
@@ -67,7 +65,10 @@ function mapcoder.transform(data)
     return toReturn
 end
 
---todo: fix this
+---Save a map's data as a .json file
+---@param path string
+---@param data LoennData
+---@param header string
 function mapcoder.encodeFile(path, data, header)
     local content = json.encode({
         header=header or "CELESTE MAP",
