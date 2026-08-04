@@ -15,6 +15,8 @@ local cloneCampaign = mods.requireFromPlugin("libraries.cloneCampaign")
 local g4l = mods.requireFromPlugin("libraries.utils")
 local custom_mapcoder = mods.requireFromPlugin("libraries.custom_mapcoder")
 
+local custom_mapcoder = mods.requireFromPlugin("libraries.custom_mapcoder")
+
 --##
 
 local old_save = mapcoder.encodeFile
