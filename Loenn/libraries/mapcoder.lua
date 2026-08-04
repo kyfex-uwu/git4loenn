@@ -80,7 +80,7 @@ function mapcoder.encodeFile(path, data, header)
     },{
         indent=true,
         exception=function(reason, value, state, defaultMessage)
-            logging.error("[JsonMaps] saving to json error: "..reason)
+            logging.error("[git4lönn] saving to g4l error: "..reason)
             return ""
         end,
     })
