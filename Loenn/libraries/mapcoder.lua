@@ -7,6 +7,12 @@ local logging = require("logging")
 local mapcoder = {}
 
 --todo: fix this
+
+---Reads a .json file and outputs the stored map's data
+---@param path string
+---@param header string
+---@return MapData | false # Map data in case of success, else false
+---@return string? # The error message in case of failure, else nil
 function mapcoder.decodeFile(path, header)
     header = header or "CELESTE MAP"
 
@@ -16,7 +22,7 @@ function mapcoder.decodeFile(path, header)
         return false, "File not found"
     end
 
-    local mapData = json.decode(reader:read("*all"))
+    local mapData = json.decode(reader:read("*all")) --[[@as MapDataTable]]
     reader:close()
 
     if mapData.header == nil then
@@ -37,10 +43,14 @@ end
 ---@return T
 local function identity(v) return v end
 
+---Transform's Loenn map data into json map data
+---@param data DataItem Loenn's map data item
+---@return MapDataItem # JSON map data item
 function mapcoder.transform(data)
     coroutine.yield()
 
     local toReturn = {}
+
     for attr, value in pairs(data) do
         if attr ~= "__children" then
             toReturn[attr]=(type(value)=="table" and mapcoder.transform or identity)(value)
