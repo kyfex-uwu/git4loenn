@@ -34,7 +34,7 @@ mapcoder.decodeFile = function(path, header)
 	return old_load(path, header)
 end
 
-function openCampaign()
+function openLevel()
     local targetDirectory = fileLocations.getCelesteDir()
 
     if loaded_state.filename and loaded_state.filename:sub(#loaded_state.filename-3) == ".g4l" and filesystem.isDirectory(loaded_state.filename) then
@@ -85,8 +85,8 @@ end
 table.insert(fileMenu,{
     "git4loenn_fileMenu",
     {
+        {"git4loenn_openLevel", openLevel},
         {"git4loenn_newCampaign"},
-        {"git4loenn_openCampaign", openCampaign},
         {"git4loenn_cloneCampaign", cloneCampaign.open},
         {},
         {"git4loenn_settings", openSettings},
