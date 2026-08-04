@@ -17,4 +17,6 @@
 ---@class DataItem : table
 ---@field __children DataItem[]?
 ---@field __name string?
----@field _package string?
+
+---@class MapData : DataItem
+---@field _package string
