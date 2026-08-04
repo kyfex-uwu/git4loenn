@@ -1,9 +1,12 @@
 ---@meta LocalTypes
 
----@class MapDataTable : table
----@field data LoennData
+---@class JsonDataTable : table
 ---@field package string
 ---@field header string
+
+
+---@class LoennDataTable : JsonDataTable
+---@field data LoennData
 
 
 ---@class LoennItem : table
@@ -12,6 +15,10 @@
 
 ---@class LoennData : LoennItem
 ---@field _package string?
+
+
+---@class MapDataTable : JsonDataTable
+---@field data MapData
 
 
 ---@class DataItem : table
