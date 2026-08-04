@@ -48,9 +48,7 @@ local function identity(v) return v end
 function mapcoder.transform(data)
     coroutine.yield()
 
-    local toReturn = {
-        __children = {}
-    }
+    local toReturn = {}
 
     for attr, value in pairs(data) do
         if attr ~= "__children" then
@@ -59,6 +57,8 @@ function mapcoder.transform(data)
     end
 
     if #(data.__children or {}) ~= 0 then
+        toReturn.__children = {}
+
         for i, child in ipairs(data.__children or {}) do
             table.insert(toReturn.__children, mapcoder.transform(child))
         end
