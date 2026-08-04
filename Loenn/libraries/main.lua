@@ -5,10 +5,44 @@ local form = require("ui.forms.form")
 local widgetUtils = require("ui.widgets.utils")
 local windows = require("ui.windows")
 local windowPersister = require("ui.window_position_persister")
+local mapcoder = require("mapcoder")
+local loaded_state = require("loaded_state")
+local filesystem = require("utils.filesystem")
+local fileLocations = require("file_locations")
 
 local settings = mods.getModSettings("git4loenn")
 local cloneCampaign = mods.requireFromPlugin("libraries.cloneCampaign")
 local g4l = mods.requireFromPlugin("libraries.utils")
+
+--##
+
+local old_save = mapcoder.encodeFile
+local old_load = mapcoder.decodeFile
+mapcoder.encodeFile = function(path, data, header)
+	if true then --todo: if map is g4l map
+        custom_mapcoder.encodeFile(path..".g4l", data, header)
+    end
+
+	return old_save(path, data, header)
+end
+mapcoder.decodeFile = function(path, header)
+	if path:sub(#path-3) == ".g4l" then 
+        return custom_mapcoder.decodeFile(path, header)
+    end
+
+	return old_load(path, header)
+end
+
+local old_openMap = loaded_state.openMap
+loaded_state.openMap = function()
+    local targetDirectory = fileLocations.getCelesteDir()
+
+    if loaded_state.filename and filesystem.isFile(loaded_state.filename) then
+        targetDirectory = filesystem.dirname(loaded_state.filename)
+    end
+
+    filesystem.openDialog(targetDirectory, "bin,json", loaded_state.loadFile)--todo: remove json and add g4l
+end
 
 --##
 
