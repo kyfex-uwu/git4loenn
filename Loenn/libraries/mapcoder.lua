@@ -150,10 +150,11 @@ function mapcoder.transform(data)
 end
 
 ---Save a map's data as a .meta.g4l file with its .g4l level files
----@param path string
+---@param savingPath string Path to save the level at (has .saving at the end)
 ---@param data LoennData
 ---@param header string
-function mapcoder.encodeFile(path, data, header)
+function mapcoder.encodeFile(savingPath, data, header)
+    local path = string.sub(savingPath,0,-7) .. "g4l"
     local mapData, levelsData = mapcoder.transformData(data)
 
     mapcoder.saveFile({
