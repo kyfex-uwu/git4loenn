@@ -149,18 +149,31 @@ function mapcoder.transform(data)
     return toReturn
 end
 
----Save a map's data as a .json file
----TODO: Update to .g4l
+---Save a map's data as a .meta.g4l file with its .g4l level files
 ---@param path string
 ---@param data LoennData
 ---@param header string
 function mapcoder.encodeFile(path, data, header)
     local mapData, levelsData = mapcoder.transformData(data)
-    local content = json.encode({
+
+    mapcoder.saveFile({
         header=header or "CELESTE MAP",
         package=data._package or "",
         data=mapData
-    },{
+    }, path)
+
+    for i, levelData in ipairs(levelsData) do
+        local levelPath = "" --TODO: sync with how levels are read
+
+        mapcoder.saveFile(levelData, levelPath)
+    end
+
+    coroutine.yield()
+end
+
+function mapcoder.saveFile(value, path)
+    local content = json.encode(
+        value,{
         indent=true,
         exception=function(reason, value, state, defaultMessage)
             logging.error("[git4lönn] saving to g4l error: "..reason)
@@ -174,8 +187,6 @@ function mapcoder.encodeFile(path, data, header)
         fh:write(content)
         fh:close()
     end
-
-    coroutine.yield()
 end
 
 return mapcoder
