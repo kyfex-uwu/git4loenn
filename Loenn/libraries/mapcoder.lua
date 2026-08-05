@@ -28,11 +28,29 @@ function mapcoder.decodeFile(path, header)
         return false, "Invalid Celeste map file"
     end
 
-    mapData.data._package = mapData.package
+    ---@type LoennDataTable
+    local loennData = {
+        header = mapData.header,
+        package = mapData.package,
+        data = mapcoder.decodeData(mapData)
+    }
 
-    coroutine.yield("update", mapData.data)
+    coroutine.yield("update", loennData.data)
 
-    return mapData.data
+    return loennData.data
+end
+
+---@param mapData MapDataTable
+---@return LoennData
+function mapcoder.decodeData(mapData)
+    ---@type LoennData
+    local newData = {
+        _package = mapData.package,
+        __name = mapData.data.__name,
+        __children = mapData.data.__children
+    }
+
+    return newData
 end
 
 --##
