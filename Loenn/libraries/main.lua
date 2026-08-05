@@ -11,8 +11,11 @@ local filesystem = require("utils.filesystem")
 local fileLocations = require("file_locations")
 
 local settings = mods.getModSettings("git4loenn")
+---@module "CloneCampaign"
 local cloneCampaign = mods.requireFromPlugin("libraries.cloneCampaign")
+---@module "utils"
 local g4l = mods.requireFromPlugin("libraries.utils")
+---@module "mapcoder"
 local custom_mapcoder = mods.requireFromPlugin("libraries.custom_mapcoder")
 
 --##

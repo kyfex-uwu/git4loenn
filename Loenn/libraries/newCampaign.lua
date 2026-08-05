@@ -1,3 +1,5 @@
+---@meta NewCampaign
+
 local fileLocations = require("file_locations")
 local languageRegistry = require("language_registry")
 local mods = require("mods")
@@ -9,10 +11,12 @@ local windows = require("ui.windows")
 local windowPersister = require("ui.window_position_persister")
 local filesystem = require("utils.filesystem")
 
+---@module "utils"
 local g4l = mods.requireFromPlugin("libraries.utils")
 
 --##
 
+---@class NewCampaign
 local newCampaign = {}
 
 local holder = uiElements.group({})

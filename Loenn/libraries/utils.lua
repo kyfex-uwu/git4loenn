@@ -1,7 +1,10 @@
+---@meta utils
+
 local logging = require("logging")
 
 --##
 
+---@class utils
 local g4l = {}
 
 function g4l.log(toLog)
