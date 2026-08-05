@@ -78,6 +78,7 @@ function openSettings()
 end
 
 local menubar = require("ui.menubar").menubar
+---@diagnostic disable-next-line: undefined-global, exp-in-action, unknown-symbol, miss-exp
 local fileMenu = $(menubar):find(menu -> menu[1] == "file")[2]
 for i,v in ipairs(fileMenu) do
     if v[1] == "git4loenn_fileMenu" then
