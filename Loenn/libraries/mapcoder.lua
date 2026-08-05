@@ -6,8 +6,7 @@ local logging = require("logging")
 ---@class mapcoder
 local mapcoder = {}
 
----Reads a .json file and outputs the stored map's data
----TODO: Update to .g4l
+---Reads a .meta.g4l file and outputs the stored map's data
 ---@param path string
 ---@param header string
 ---@return LoennData | false # Map data in case of success, else false
@@ -28,29 +27,57 @@ function mapcoder.decodeFile(path, header)
         return false, "Invalid Celeste map file"
     end
 
-    ---@type LoennDataTable
-    local loennData = {
-        header = mapData.header,
-        package = mapData.package,
-        data = mapcoder.decodeData(mapData)
-    }
-
-    coroutine.yield("update", loennData.data)
-
-    return loennData.data
-end
-
----@param mapData MapDataTable
----@return LoennData
-function mapcoder.decodeData(mapData)
     ---@type LoennData
-    local newData = {
+    local loennData = {
         _package = mapData.package,
         __name = mapData.data.__name,
-        __children = mapData.data.__children
+        __children = mapData.data.__children --[[@as (LoennItem[])]]
     }
 
-    return newData
+    if #(mapData.data.__levels or {}) ~= 0 then
+        ---@type LoennItem
+        local levelsData = {
+            __name = "levels",
+            __children = {}
+        }
+
+        for i, levelName in ipairs(mapData.data.__levels) do
+            local levelData, message = mapcoder.decodeLevel(levelName)
+            if not levelData then
+                -- log error
+            else
+                table.insert(levelsData.__children, levelData)
+            end
+        end
+
+        table.insert(loennData.__children, 1, levelsData)
+    end
+
+    coroutine.yield("update", loennData)
+
+    return loennData
+end
+
+---Reads a .g4l file and outputs the map's level data
+---@param levelName string
+---@return LoennItem | false # Level Data if successful, false otherwise
+---@return string? # Error message if failure, nil otherwise
+function mapcoder.decodeLevel(levelName)
+    local levelPath = "" --TODO: sync with how levels are stored
+
+    local reader = io.open(levelPath, "rb")
+    if not reader then
+        return false, "File not found"
+    end
+
+    local levelData = json.decode(reader:read("*all")) --[[@as LoennItem]]
+    reader:close()
+
+    if levelData["name"] ~= levelName then
+        return false, "Level name does not match filename"
+    end
+    
+    return levelData
 end
 
 --##
@@ -79,7 +106,7 @@ function mapcoder.transformData(data)
         mapData.__children = {}
 
         for i, child in ipairs(data.__children or {}) do
-            if child.__name == "levels" then
+            if child.__name == "levels" and #(child.__children or {}) ~=0 then
                 mapData.__levels = {}
 
                 for j, level in ipairs(child.__children) do
