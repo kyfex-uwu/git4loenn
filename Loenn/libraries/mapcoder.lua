@@ -2,6 +2,7 @@
 
 local json = require("lib.dkjson")
 local logging = require("logging")
+local lfs = require("lib.lfs_ffi")
 
 ---@class mapcoder
 local mapcoder = {}
@@ -154,19 +155,18 @@ end
 ---@param data LoennData
 ---@param header string
 function mapcoder.encodeFile(savingPath, data, header)
-    local path = string.sub(savingPath,0,-7) .. "g4l"
+    local rootPath = string.sub(savingPath,0,-12)
     local mapData, levelsData = mapcoder.transformData(data)
 
     mapcoder.saveFile({
         header=header or "CELESTE MAP",
         package=data._package or "",
         data=mapData
-    }, path)
+    }, rootPath .. ".meta.g4l")
 
-    for i, levelData in ipairs(levelsData) do
-        local levelPath = "" --TODO: sync with how levels are read
-
-        mapcoder.saveFile(levelData, levelPath)
+    lfs.mkdir(rootPath)
+    for _, levelData in ipairs(levelsData) do
+        mapcoder.saveFile(levelData, rootPath .. "/" .. levelData["name"] .. ".room.g4l")
     end
 
     coroutine.yield()
@@ -175,7 +175,6 @@ end
 function mapcoder.saveFile(value, path)
     local content = json.encode(
         value,{
-        indent=true,
         exception=function(reason, value, state, defaultMessage)
             logging.error("[git4lönn] saving to g4l error: "..reason)
             return ""
