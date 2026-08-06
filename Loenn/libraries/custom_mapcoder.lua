@@ -187,6 +187,7 @@ end
 function mapcoder.saveFile(value, path)
     local content = json.encode(
         value,{
+        indent = true,
         exception=function(reason, value, state, defaultMessage)
             logging.error("[git4lönn] saving to g4l error: "..reason)
             return ""
