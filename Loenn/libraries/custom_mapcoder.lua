@@ -7,9 +7,9 @@ local lfs = require("lib.lfs_ffi")
 ---@class custom_mapcoder
 local mapcoder = {}
 
----Reads a .meta.g4l file and outputs the stored map's data
----@param path string
----@param header string
+---Reads a .meta.g4l file and the dependent files and return the stored map's data
+---@param path string the .meta.g4l file path
+---@param header string i unno
 ---@return LoennData | false # Map data in case of success, else false
 ---@return string? # The error message in case of failure, else nil
 function mapcoder.decodeFile(path, header)
@@ -152,8 +152,8 @@ end
 
 ---Save a map's data as a .meta.g4l file with its .g4l level files
 ---@param savingPath string Path to save the level at (has .saving at the end)
----@param data LoennData
----@param header string
+---@param data LoennData The map data
+---@param header string i unno
 function mapcoder.encodeFile(savingPath, data, header)
     local rootPath = string.sub(savingPath,0,-12)
     local mapData, levelsData = mapcoder.transformData(data)
