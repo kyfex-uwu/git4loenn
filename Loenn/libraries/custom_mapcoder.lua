@@ -3,6 +3,9 @@
 local json = require("lib.dkjson")
 local logging = require("logging")
 local lfs = require("lib.lfs_ffi")
+local mods = require("mods")
+---@module "utils"
+local g4l = mods.requireFromPlugin("libraries.utils")
 
 ---@class custom_mapcoder
 local mapcoder = {}
@@ -42,10 +45,11 @@ function mapcoder.decodeFile(path, header)
             __children = {}
         }
 
+        local folder_name = string.sub(path,0,-10)
         for i, levelName in ipairs(mapData.data.__levels) do
-            local levelData, message = mapcoder.decodeLevel(levelName)
+            local levelData, message = mapcoder.decodeLevel(folder_name, levelName)
             if not levelData then
-                -- log error
+                g4l.log("room loading error: " .. message)
             else
                 table.insert(levelsData.__children, levelData)
             end
@@ -60,15 +64,15 @@ function mapcoder.decodeFile(path, header)
 end
 
 ---Reads a .g4l file and outputs the map's level data
----@param levelName string
+---@param folder string containing folder
+---@param levelName string level name
 ---@return LoennItem | false # Level Data if successful, false otherwise
 ---@return string? # Error message if failure, nil otherwise
-function mapcoder.decodeLevel(levelName)
-    local levelPath = "" --TODO: sync with how levels are stored
-
-    local reader = io.open(levelPath, "rb")
+function mapcoder.decodeLevel(folder, levelName)
+    local pos = folder .. "/" .. levelName .. ".room.g4l"
+    local reader = io.open(pos, "rb")
     if not reader then
-        return false, "File not found"
+        return false, "File " .. pos .." not found"
     end
 
     local levelData = json.decode(reader:read("*all")) --[[@as LoennItem]]
@@ -77,7 +81,7 @@ function mapcoder.decodeLevel(levelName)
     if levelData["name"] ~= levelName then
         return false, "Level name does not match filename"
     end
-    
+
     return levelData
 end
 
