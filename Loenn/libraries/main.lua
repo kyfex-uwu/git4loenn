@@ -30,7 +30,7 @@ mapcoder.encodeFile = function(path, data, header)
 	return old_save(path, data, header)
 end
 mapcoder.decodeFile = function(path, header)
-	if path:sub(#path-3) == ".g4l" then
+	if custom_mapcoder.isMetaFile(path) then
         return custom_mapcoder.decodeFile(path, header)
     end
 
@@ -40,11 +40,11 @@ end
 function openLevel()
     local targetDirectory = fileLocations.getCelesteDir()
 
-    if loaded_state.filename and loaded_state.filename:sub(#loaded_state.filename-3) == ".g4l" and filesystem.isDirectory(loaded_state.filename) then
+    if loaded_state.filename and custom_mapcoder.isMetaFile(loaded_state.filename) and filesystem.isDirectory(loaded_state.filename) then
         targetDirectory = filesystem.dirname(loaded_state.filename)
     end
 
-    filesystem.openDialog(targetDirectory, "g4l", loaded_state.loadFile)
+    filesystem.openDialog(targetDirectory, custom_mapcoder.meta_ext, loaded_state.loadFile)
 end
 
 --##

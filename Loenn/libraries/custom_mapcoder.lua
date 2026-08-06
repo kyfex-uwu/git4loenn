@@ -10,6 +10,13 @@ local g4l = mods.requireFromPlugin("libraries.utils")
 ---@class custom_mapcoder
 local mapcoder = {}
 
+mapcoder.meta_ext = "g4l"
+mapcoder.room_ext = "room.g4l"
+
+local function makeLevelPath(rootName, levelName)
+    return rootName .. "/" .. levelName .. "." .. mapcoder.room_ext
+end
+
 ---Reads a .g4l file and the dependent .room.g4l files and return the stored map's data
 ---@param path string the .g4l file path
 ---@param header string i unno
@@ -69,7 +76,7 @@ end
 ---@return LoennItem | false # Level Data if successful, false otherwise
 ---@return string? # Error message if failure, nil otherwise
 function mapcoder.decodeLevel(folder, levelName)
-    local levelPath = folder .. "/" .. levelName .. ".room.g4l"
+    local levelPath = makeLevelPath(folder, levelName)
 
     local reader = io.open(levelPath, "rb")
     if not reader then
@@ -167,11 +174,11 @@ function mapcoder.encodeFile(savingPath, data, header)
         header=header or "CELESTE MAP",
         package=data._package or "",
         data=mapData
-    }, rootPath .. ".g4l")
+    }, rootPath .. "." .. mapcoder.meta_ext)
 
     lfs.mkdir(rootPath)
     for _, levelData in ipairs(levelsData) do
-        mapcoder.saveFile(levelData, rootPath .. "/" .. levelData["name"] .. ".room.g4l")
+        mapcoder.saveFile(levelData, makeLevelPath(rootPath, levelData["name"]))
     end
 
     coroutine.yield()
@@ -192,6 +199,10 @@ function mapcoder.saveFile(value, path)
         fh:write(content)
         fh:close()
     end
+end
+
+function mapcoder.isMetaFile(path)
+    return path:sub(#path-#mapcoder.meta_ext) == ("." .. mapcoder.meta_ext)
 end
 
 return mapcoder
