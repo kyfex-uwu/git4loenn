@@ -69,10 +69,11 @@ end
 ---@return LoennItem | false # Level Data if successful, false otherwise
 ---@return string? # Error message if failure, nil otherwise
 function mapcoder.decodeLevel(folder, levelName)
-    local pos = folder .. "/" .. levelName .. ".room.g4l"
-    local reader = io.open(pos, "rb")
+    local levelPath = folder .. "/" .. levelName .. ".room.g4l"
+
+    local reader = io.open(levelPath, "rb")
     if not reader then
-        return false, "File " .. pos .." not found"
+        return false, "File " .. levelPath .." not found"
     end
 
     local levelData = json.decode(reader:read("*all")) --[[@as LoennItem]]
