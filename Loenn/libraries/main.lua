@@ -15,7 +15,7 @@ local settings = mods.getModSettings("git4loenn")
 local cloneCampaign = mods.requireFromPlugin("libraries.cloneCampaign")
 ---@module "utils"
 local g4l = mods.requireFromPlugin("libraries.utils")
----@module "mapcoder"
+---@module "custom_mapcoder"
 local custom_mapcoder = mods.requireFromPlugin("libraries.custom_mapcoder")
 
 --##

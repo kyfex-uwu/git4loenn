@@ -1,10 +1,10 @@
----@meta mapcoder
+---@meta custom_mapcoder
 
 local json = require("lib.dkjson")
 local logging = require("logging")
 local lfs = require("lib.lfs_ffi")
 
----@class mapcoder
+---@class custom_mapcoder
 local mapcoder = {}
 
 ---Reads a .meta.g4l file and outputs the stored map's data
