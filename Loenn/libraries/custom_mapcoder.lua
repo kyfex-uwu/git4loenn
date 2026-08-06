@@ -52,7 +52,7 @@ function mapcoder.decodeFile(path, header)
             __children = {}
         }
 
-        local folder_name = string.sub(path,0,-5)
+        local folder_name = string.sub(path,0,-(#mapcoder.meta_ext + 2))
         for i, levelName in ipairs(mapData.data.__levels) do
             local levelData, message = mapcoder.decodeLevel(folder_name, levelName)
             if not levelData then
