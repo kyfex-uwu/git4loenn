@@ -10,8 +10,8 @@ local g4l = mods.requireFromPlugin("libraries.utils")
 ---@class custom_mapcoder
 local mapcoder = {}
 
----Reads a .meta.g4l file and the dependent files and return the stored map's data
----@param path string the .meta.g4l file path
+---Reads a .g4l file and the dependent .room.g4l files and return the stored map's data
+---@param path string the .g4l file path
 ---@param header string i unno
 ---@return LoennData | false # Map data in case of success, else false
 ---@return string? # The error message in case of failure, else nil
@@ -45,7 +45,7 @@ function mapcoder.decodeFile(path, header)
             __children = {}
         }
 
-        local folder_name = string.sub(path,0,-10)
+        local folder_name = string.sub(path,0,-5)
         for i, levelName in ipairs(mapData.data.__levels) do
             local levelData, message = mapcoder.decodeLevel(folder_name, levelName)
             if not levelData then
@@ -63,7 +63,7 @@ function mapcoder.decodeFile(path, header)
     return loennData
 end
 
----Reads a .g4l file and outputs the map's level data
+---Reads a .room.g4l file and outputs the map's level data
 ---@param folder string containing folder
 ---@param levelName string level name
 ---@return LoennItem | false # Level Data if successful, false otherwise
@@ -155,7 +155,7 @@ function mapcoder.transform(data)
     return toReturn
 end
 
----Save a map's data as a .meta.g4l file with its .g4l level files
+---Save a map's data as a .g4l file with its .room.g4l level files
 ---@param savingPath string Path to save the level at (has .saving at the end)
 ---@param data LoennData The map data
 ---@param header string i unno
@@ -167,7 +167,7 @@ function mapcoder.encodeFile(savingPath, data, header)
         header=header or "CELESTE MAP",
         package=data._package or "",
         data=mapData
-    }, rootPath .. ".meta.g4l")
+    }, rootPath .. ".g4l")
 
     lfs.mkdir(rootPath)
     for _, levelData in ipairs(levelsData) do
