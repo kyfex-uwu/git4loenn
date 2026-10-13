@@ -4,7 +4,7 @@
 local git = {}
 
 local function executeAndRead(cmd)
-  local handle = io.popen(cmd)
+  local handle = io.popen(cmd .. " 2>&1")
   if not handle then
     return false, "Could not execute command."
   end
