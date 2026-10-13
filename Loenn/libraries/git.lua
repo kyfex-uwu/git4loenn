@@ -19,6 +19,10 @@ local function executeCmd(cmd)
   return success
 end
 
+function git.isInRepo()
+  return executeAndRead("git rev-parse --is-inside-work-tree") == "true"
+end
+
 function git.getRepoRoot()
   return executeAndRead("git rev-parse --show-toplevel")
 end
