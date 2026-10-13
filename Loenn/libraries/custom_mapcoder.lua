@@ -3,7 +3,6 @@
 local json = require("lib.dkjson")
 local filesystem = require("utils.filesystem")
 local logging = require("logging")
-local lfs = require("lib.lfs_ffi")
 local mods = require("mods")
 ---@module "utils"
 local g4l = mods.requireFromPlugin("libraries.utils")
@@ -183,11 +182,10 @@ function mapcoder.encodeFile(savingPath, data, header)
         return
     end
 
-    local baseDir = filesystem.joinpath(repoRoot, ".g4l_maps")
-    lfs.mkdir(baseDir)
-
-    local savePath = baseDir .. relativePath
+    local savePath = filesystem.joinpath(repoRoot, ".g4l_maps") .. relativePath
     local mapData, levelsData = mapcoder.transformData(data)
+
+    filesystem.mkpath(savePath)
 
     mapcoder.saveFile({
         header=header or "CELESTE MAP",
@@ -195,7 +193,6 @@ function mapcoder.encodeFile(savingPath, data, header)
         data=mapData
     }, savePath .. "." .. mapcoder.meta_ext)
 
-    lfs.mkdir(savePath)
     for _, levelData in ipairs(levelsData) do
         mapcoder.saveFile(levelData, makeLevelPath(savePath, levelData["name"]))
     end
