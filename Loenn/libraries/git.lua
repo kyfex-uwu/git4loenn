@@ -53,7 +53,7 @@ function git.getRepoRoot(path)
     return false, error
   end
 
-  return filesystem.dirname(result)
+  return filesystem.joinpath(result)
 end
 
 return git

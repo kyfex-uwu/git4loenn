@@ -1,6 +1,7 @@
 ---@meta custom_mapcoder
 
 local json = require("lib.dkjson")
+local filesystem = require("utils.filesystem")
 local logging = require("logging")
 local lfs = require("lib.lfs_ffi")
 local mods = require("mods")
@@ -16,7 +17,7 @@ mapcoder.meta_ext = "g4l"
 mapcoder.room_ext = "room.g4l"
 
 local function makeLevelPath(rootName, levelName)
-    return rootName .. "/" .. levelName .. "." .. mapcoder.room_ext
+    return filesystem.joinpath(rootName, levelName .. "." .. mapcoder.room_ext)
 end
 
 ---Reads a .g4l file and the dependent .room.g4l files and return the stored map's data
@@ -182,7 +183,7 @@ function mapcoder.encodeFile(savingPath, data, header)
         return
     end
 
-    local baseDir = repoRoot .. "/.g4l_maps"
+    local baseDir = filesystem.joinpath(repoRoot, ".g4l_maps")
     lfs.mkdir(baseDir)
 
     local savePath = baseDir .. relativePath
