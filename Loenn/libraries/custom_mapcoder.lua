@@ -6,6 +6,8 @@ local lfs = require("lib.lfs_ffi")
 local mods = require("mods")
 ---@module "utils"
 local g4l = mods.requireFromPlugin("libraries.utils")
+---@module "git"
+local git = mods.requireFromPlugin("libraries.git")
 
 ---@class custom_mapcoder
 local mapcoder = {}
@@ -167,18 +169,34 @@ end
 ---@param data LoennData The map data
 ---@param header string i unno
 function mapcoder.encodeFile(savingPath, data, header)
+    local repoRoot, errorMsg = git.getRepoRoot()
+    if not repoRoot then
+        g4l.log(errorMsg)
+        return
+    end
+
     local rootPath = string.sub(savingPath,0,-12)
+    local inRepo, relativePath = g4l.stripPrefix(rootPath, repoRoot)
+    if not inRepo then
+        g4l.log("Saving path is not within repository: " .. rootPath)
+        return
+    end
+
+    local baseDir = repoRoot .. "/.g4l_maps"
+    lfs.mkdir(baseDir)
+
+    local savePath = baseDir .. relativePath
     local mapData, levelsData = mapcoder.transformData(data)
 
     mapcoder.saveFile({
         header=header or "CELESTE MAP",
         package=data._package or "",
         data=mapData
-    }, rootPath .. "." .. mapcoder.meta_ext)
+    }, savePath .. "." .. mapcoder.meta_ext)
 
-    lfs.mkdir(rootPath)
+    lfs.mkdir(savePath)
     for _, levelData in ipairs(levelsData) do
-        mapcoder.saveFile(levelData, makeLevelPath(rootPath, levelData["name"]))
+        mapcoder.saveFile(levelData, makeLevelPath(savePath, levelData["name"]))
     end
 
     coroutine.yield()
