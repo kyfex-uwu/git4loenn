@@ -1,5 +1,8 @@
 ---@meta git
 
+local filesystem = require("utils.filesystem")
+local loaded_state = require("loaded_state")
+
 ---@class git
 local git = {}
 
@@ -13,7 +16,7 @@ local function executeAndRead(cmd, path)
     return false, "Could not execute command."
   end
 
-  local result = handle:read("a")
+  local result = handle:read("a"):match("(.-)%s*$")
   handle:close()
   return result
 end
@@ -27,8 +30,16 @@ local function executeCmd(cmd, path)
   return success
 end
 
+local function loadedDir()
+  if loaded_state.filename then
+    return filesystem.dirname(loaded_state.filename)
+  end
+
+  return nil
+end
+
 function git.isInRepo(path)
-  local result, error = executeAndRead("git rev-parse --is-inside-work-tree", path)
+  local result, error = executeAndRead("git rev-parse --is-inside-work-tree", path or loadedDir())
   if not result then
     return false, error
   end
@@ -37,7 +48,7 @@ function git.isInRepo(path)
 end
 
 function git.getRepoRoot(path)
-  return executeAndRead("git rev-parse --show-toplevel", path)
+  return executeAndRead("git rev-parse --show-toplevel", path or loadedDir())
 end
 
 return git
