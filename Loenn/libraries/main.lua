@@ -17,13 +17,15 @@ local cloneCampaign = mods.requireFromPlugin("libraries.cloneCampaign")
 local g4l = mods.requireFromPlugin("libraries.utils")
 ---@module "custom_mapcoder"
 local custom_mapcoder = mods.requireFromPlugin("libraries.custom_mapcoder")
+---@module "git"
+local git = mods.requireFromPlugin("libraries.git")
 
 --##
 
 local old_save = mapcoder.encodeFile
 local old_load = mapcoder.decodeFile
 mapcoder.encodeFile = function(path, data, header)
-	if true then --todo: if map is g4l map
+	if git.isInRepo() then --todo: if map is g4l map
         custom_mapcoder.encodeFile(path, data, header)
     end
 
