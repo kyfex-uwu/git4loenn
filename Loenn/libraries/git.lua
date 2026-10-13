@@ -48,7 +48,12 @@ function git.isInRepo(path)
 end
 
 function git.getRepoRoot(path)
-  return executeAndRead("git rev-parse --show-toplevel", path or loadedDir())
+  local result, error = executeAndRead("git rev-parse --show-toplevel", path or loadedDir())
+  if not result then
+    return false, error
+  end
+
+  return filesystem.dirname(result)
 end
 
 return git
