@@ -20,7 +20,12 @@ local function executeCmd(cmd)
 end
 
 function git.isInRepo()
-  return executeAndRead("git rev-parse --is-inside-work-tree") == "true"
+  local result, error = executeAndRead("git rev-parse --is-inside-work-tree")
+  if not result then
+    return false, error
+  end
+
+  return result == "true"
 end
 
 function git.getRepoRoot()

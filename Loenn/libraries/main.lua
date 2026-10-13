@@ -25,8 +25,11 @@ local git = mods.requireFromPlugin("libraries.git")
 local old_save = mapcoder.encodeFile
 local old_load = mapcoder.decodeFile
 mapcoder.encodeFile = function(path, data, header)
-	if git.isInRepo() then --todo: if map is g4l map
+    local inRepo, error = git.isInRepo()
+	if inRepo then --todo: if map is g4l map
         custom_mapcoder.encodeFile(path, data, header)
+    elseif error then
+        g4l.log(error)
     end
 
 	return old_save(path, data, header)
