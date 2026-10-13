@@ -178,7 +178,7 @@ function mapcoder.encodeFile(savingPath, data, header)
     local rootPath = string.sub(savingPath,0,-12)
     local inRepo, relativePath = g4l.stripPrefix(rootPath, repoRoot)
     if not inRepo then
-        g4l.log("Saving path is not within repository: " .. rootPath)
+        g4l.log("Saving path is not within repository: " .. relativePath)
         return
     end
 
